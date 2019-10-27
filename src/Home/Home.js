@@ -13,13 +13,15 @@ function Home() {
         name: '',
         gender: '',
         party: '',
-        title: ''
+        title: '',
+        master: '',
       },
       chamber:'senate',
       congress: {
         senate:congress.senate,
         house: congress.house
-      }
+      },
+      fields: false
     });
 
   function getData(chamber = 'senate', congress = '115') {
@@ -52,7 +54,6 @@ function Home() {
     if (state.members.length === 0){
       return getData();
     }
-
   });
 
   function FillCongress() {
@@ -97,119 +98,139 @@ function Home() {
         return member[filter].search(data) > -1
       })
     }
+  }
 
+  function FilterMaster(e) {
+    const search = e.target.value.toLowerCase();
+    arr = state.members.filter((member) => {
+      if (member.first_name.toLowerCase().search(search) > -1 || member.last_name.toLowerCase().search(search) > -1){
+        return true
+      }else if(member.gender.toLowerCase().search(search) > -1){
+        return true
+      } else if (member.party.toLowerCase().search(search) > -1) {
+        return true
+      } else return member.title.toLowerCase().search(search) > -1;
+    });
+
+    setState({ ...state ,
+      filter: arr,
+      search: {
+        name: state.search.name,
+        gender: state.search.gender,
+        title: state.search.title,
+        party: state.search.party,
+        master: search
+      }
+    });
   }
 
   function FilterByName(e) {
     const name = e.target.value.toLowerCase();
-    if (name.length > 0) {
-      arr = FilterMembers('first_name', name, state.members);
+    arr = FilterMembers('first_name', name, state.members);
 
-      if (state.search.gender !== '')
-        arr = FilterMembers('gender', state.search.gender, arr);
+    if (state.search.gender !== '')
+      arr = FilterMembers('gender', state.search.gender, arr);
 
-      if (state.search.party !== '')
-        arr = FilterMembers('party', state.search.party, arr);
+    if (state.search.party !== '')
+      arr = FilterMembers('party', state.search.party, arr);
 
-      if (state.search.title !== '')
-        arr = FilterMembers('title', state.search.title, arr);
+    if (state.search.title !== '')
+      arr = FilterMembers('title', state.search.title, arr);
 
-      setState({ ...state ,
-        filter: arr,
-        search: {
-          name: name,
-          gender: state.search.gender,
-          title: state.search.title,
-          party: state.search.party
-        }
-      });
-    }
+    setState({ ...state ,
+      filter: arr,
+      search: {
+        name: name,
+        gender: state.search.gender,
+        title: state.search.title,
+        party: state.search.party,
+        master: state.search.master
+      }
+    });
   }
 
   function FilterByGender(e) {
     const gender = e.target.value;
-    if (gender.length > 0) {
-      arr = FilterMembers('gender', gender, state.members);
+    arr = FilterMembers('gender', gender, state.members);
 
-      if (state.search.name !== '')
-        arr = FilterMembers('first_name', state.search.name, arr);
+    if (state.search.name !== '')
+      arr = FilterMembers('first_name', state.search.name, arr);
 
-      if (state.search.party !== '')
-        arr = FilterMembers('party', state.search.party, arr);
+    if (state.search.party !== '')
+      arr = FilterMembers('party', state.search.party, arr);
 
-      if (state.search.title !== '')
-        arr = FilterMembers('title', state.search.title, arr);
+    if (state.search.title !== '')
+      arr = FilterMembers('title', state.search.title, arr);
 
-      setState({...state,
-        filter: arr,
-        search:{
-          name: state.search.name,
-          gender: gender,
-          title: state.search.title,
-          party: state.search.party
-        }
-      });
-    }
+    setState({...state,
+      filter: arr,
+      search:{
+        name: state.search.name,
+        gender: gender,
+        title: state.search.title,
+        party: state.search.party,
+        master: state.search.master
+      }
+    });
   }
 
   function FilterByParty(e) {
     const party = e.target.value;
-    if (party.length > 0) {
-      arr = FilterMembers('party', party, state.members);
+    arr = FilterMembers('party', party, state.members);
 
-      if (state.search.name !== '')
-        arr = FilterMembers('first_name', state.search.name, arr);
+    if (state.search.name !== '')
+      arr = FilterMembers('first_name', state.search.name, arr);
 
-      if (state.search.gender !== '')
-        arr = FilterMembers('gender', state.search.gender, arr);
+    if (state.search.gender !== '')
+      arr = FilterMembers('gender', state.search.gender, arr);
 
-      if (state.search.title !== '')
-        arr = FilterMembers('title', state.search.title, arr);
+    if (state.search.title !== '')
+      arr = FilterMembers('title', state.search.title, arr);
 
-      setState({ ...state ,
-        filter: arr,
-        search: {
-          name: state.search.name,
-          gender: state.search.gender,
-          title: state.search.title,
-          party: party
-        }
-      });
-    }
+    setState({ ...state ,
+      filter: arr,
+      search: {
+        name: state.search.name,
+        gender: state.search.gender,
+        title: state.search.title,
+        party: party,
+        master: state.search.master
+      }
+    });
   }
 
   function FilterByTitle(e) {
     const title = e.target.value;
-    if (title.length > 0) {
-      arr = FilterMembers('title', title, state.members);
+    arr = FilterMembers('title', title, state.members);
 
-      if (state.search.name !== '')
-        arr = FilterMembers('first_name', state.search.name, arr);
+    if (state.search.name !== '')
+      arr = FilterMembers('first_name', state.search.name, arr);
 
-      if (state.search.gender !== '')
-        arr = FilterMembers('gender', state.search.gender, arr);
+    if (state.search.gender !== '')
+      arr = FilterMembers('gender', state.search.gender, arr);
 
-      if (state.search.title !== '')
-        arr = FilterMembers('title', state.search.title, arr);
+    if (state.search.title !== '')
+      arr = FilterMembers('title', state.search.title, arr);
 
-      setState({ ...state ,
-        filter: arr,
-        search: {
-          name: state.search.name,
-          gender: state.search.gender,
-          title: title,
-          party: state.search.party
-        }
-      });
-    }
+    setState({ ...state ,
+      filter: arr,
+      search: {
+        name: state.search.name,
+        gender: state.search.gender,
+        title: title,
+        party: state.search.party,
+        master: state.search.master
+      }
+    });
+  }
+
+  function ToggleFields(e) {
+    setState({...state,
+      fields: !state.fields
+    });
   }
 
   function ResetFilter() {
-    document.getElementById('nameFilter').value = '';
-    document.getElementById('titleFilter').value = '';
-    document.getElementById('genderFilter').value = '';
-    document.getElementById('partyFilter').value = '';
-
     setState({...state,
       filter: state.members,
       search: {
@@ -232,14 +253,6 @@ function Home() {
               <option value="house">House</option>
             </select>
           </div>
-          <div className="form-group">
-            <label htmlFor="nameFilter">Name</label>
-            <input type="text" className="form-control" onChange={FilterByName} id="nameFilter" aria-describedby="Name Filter" placeholder="Ej. John" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="titleFilter">Title</label>
-            <input type="text" className="form-control" onChange={FilterByTitle} id="titleFilter" aria-describedby="Title Filter" placeholder="2nd Class" />
-          </div>
         </div>
         <div className="col-lg-4 col-10">
           <div className="form-group">
@@ -248,27 +261,55 @@ function Home() {
               {state.chamber === 'senate' ? state.congress.senate : state.congress.house}
             </select>
           </div>
-          <div className="form-group">
-            <label htmlFor="genderFilter">Gender</label>
-            <select className="form-control" id="genderFilter" onChange={FilterByGender}>
-              <option defaultValue hidden> Select a value</option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="partyFilter">Party</label>
-            <select className="form-control" id="partyFilter" onChange={FilterByParty}>
-              <option defaultValue hidden> Select a value</option>
-              <option value="R">Republic</option>
-              <option value="D">Democratic</option>
-            </select>
-          </div>
         </div>
       </div>
+      {state.fields ? (
+        <div className="row justify-content-center">
+          <div className="col-lg-4 col-10">
+            <div className="form-group">
+              <label htmlFor="nameFilter">Name</label>
+              <input type="text" className="form-control" onChange={FilterByName} id="nameFilter" aria-describedby="Name Filter" placeholder="Ej. John" value={state.search.name} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="titleFilter">Title</label>
+              <input type="text" className="form-control" onChange={FilterByTitle} id="titleFilter" aria-describedby="Title Filter" placeholder="2nd Class" value={state.search.title} />
+            </div>
+          </div>
+          <div className="col-lg-4 col-10">
+            <div className="form-group">
+              <label htmlFor="genderFilter">Gender</label>
+              <select className="form-control" id="genderFilter" onChange={FilterByGender}>
+                <option defaultValue hidden> Select a value</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="partyFilter">Party</label>
+              <select className="form-control" id="partyFilter" onChange={FilterByParty}>
+                <option defaultValue hidden> Select a value</option>
+                <option value="R">Republic</option>
+                <option value="D">Democratic</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="row">
+          <div className="col-lg-4 offset-lg-2 col-10">
+            <div className="form-group">
+              <label htmlFor="congressFilter">Search</label>
+              <input type="text" className="form-control" onChange={FilterMaster} id="masterFilter" aria-describedby="Search" value={state.search.master} />
+            </div>
+          </div>
+        </div>
+      ) }
       <div className="row justify-content-center mb-3">
         <div className="col-3">
-          <button className="btn btn-primary btn-block" onClick={ResetFilter}>Clear</button>
+          <button className="btn btn-primary btn-block" onClick={ToggleFields}>{state.fields ? 'HIDE FILTERS' : 'SHOW FILTERS'}</button>
+        </div>
+        <div className="col-3">
+          <button className="btn btn-secondary btn-block" onClick={ResetFilter}>CLEAR</button>
         </div>
       </div>
       <div className="row">
